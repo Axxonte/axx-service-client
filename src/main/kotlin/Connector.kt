@@ -50,6 +50,7 @@ class Connector(var token: String, var username: String) {
 
                                     "computer" -> {
                                         registered = true
+                                        trayIcon.showNotification("Axx-Client", "Conecté au serveur")
                                     }
 
                                     else -> {
@@ -57,11 +58,9 @@ class Connector(var token: String, var username: String) {
                                     }
                                 }
                             } else {
-                                when (received.lowercase()) {
-                                    "stop" -> {
-                                        System.exit(1)
-                                    }
-                                }
+                                val commande = received.lowercase().split(" ")[0]
+                                val commandId = CommandID.byNameIgnoreCaseOrNull(commande)
+                                println(executeById(commandId))
                             }
                         }
                     }
