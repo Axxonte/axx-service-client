@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "2.1.10"
     application
 }
 
 
-group = "org.example"
+group = "fr.axxonte"
 version = "1.0-SNAPSHOT"
 
 
@@ -16,13 +16,16 @@ repositories {
     mavenCentral()
 }
 
-val ktor_version: String = "2.3.7"
+val ktor_version: String = "3.1.1"
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-websockets:$ktor_version")
+
+    implementation("com.github.oshi:oshi-core:6.4.13")
+
 }
 
 tasks.test {
@@ -32,4 +35,6 @@ kotlin {
     jvmToolchain(21)
 }
 
-
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
+}
