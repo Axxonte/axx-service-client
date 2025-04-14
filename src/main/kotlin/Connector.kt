@@ -17,11 +17,11 @@ import java.io.InputStreamReader
 
 class Connector(var token: String, var username: String) {
 
-    lateinit var socket : Socket
-    lateinit var selectorManager : SelectorManager
+    lateinit var socket: Socket
+    lateinit var selectorManager: SelectorManager
 
-    lateinit var receiveChannel : ByteReadChannel
-    lateinit var sendChannel : ByteWriteChannel
+    lateinit var receiveChannel: ByteReadChannel
+    lateinit var sendChannel: ByteWriteChannel
 
     fun connectToWebsocket() {
 
@@ -35,27 +35,40 @@ class Connector(var token: String, var username: String) {
             receiveChannel = socket.openReadChannel()
             sendChannel = socket.openWriteChannel(autoFlush = true)
 
+            var registered = false
+
             launch(Dispatchers.IO) {
                 runBlocking {
                     while (true) {
                         val received = receiveChannel.readUTF8Line()
-                        when (received) {
-                            "DeviceType" -> {
-                                sendChannel.writeStringUtf8("COMPUTER\n")
-                            }
-
-                            else -> {
-                                println(received)
-                            }
-                        }
                         if (received != null) {
-                            println(received)
+                            if (!registered) {
+                                when (received.lowercase()) {
+                                    "devicetype" -> {
+                                        sendChannel.writeStringUtf8("COMPUTER\n")
+                                    }
+
+                                    "computer" -> {
+                                        registered = true
+                                    }
+
+                                    else -> {
+                                        println(received)
+                                    }
+                                }
+                            } else {
+                                when (received.lowercase()) {
+                                    "stop" -> {
+                                        System.exit(1)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }.start()
 
-            while (true){
+            while (true) {
                 println("Message :")
                 sendChannel.writeStringUtf8(readln() + '\n')
             }
