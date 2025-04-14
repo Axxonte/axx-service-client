@@ -59,32 +59,7 @@ class Connector(var token: String, var username: String) {
                 println("Message :")
                 sendChannel.writeStringUtf8(readln() + '\n')
             }
-
-//            launch(Dispatchers.IO) {        //Exemple de recepteur / envoyeur
-//                while (true) {
-//                    val greeting = receiveChannel.readUTF8Line()
-//                    if (greeting != null) {
-//                        println(greeting)
-//                    } else {
-//                        println("Server closed a connection")
-//                        socket.close()
-//                        selectorManager.close()
-//                        exitProcess(0)
-//                    }
-//                }
-//            }
-//
-//            while (true) {
-//                println("Ecris ou je t'ecris : ")
-//                val myMessage = readln()
-//                println("myMessage : $myMessage")
-//                sendChannel.writeStringUtf8(myMessage + "\n")
-//            }
-
-
         }
-
-//     return isConnected
     }
 
     @Deprecated(
